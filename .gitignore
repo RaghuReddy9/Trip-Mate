@@ -1,0 +1,16 @@
+# Node / React
+node_modules/
+client/frontend.log
+
+# Python
+venv/
+__pycache__/
+
+# Environment
+.env
+
+# Database
+database.db
+
+# Mac
+.DS_Store
