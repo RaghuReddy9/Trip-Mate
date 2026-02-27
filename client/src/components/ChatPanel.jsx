@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import axios from 'axios';
 
-const ChatPanel = ({ onItineraryUpdate }) => {
+const ChatPanel = ({ onItineraryUpdate, token }) => {
     const [messages, setMessages] = useState([
         { role: 'assistant', content: 'Namasthe! I\'m your Trip Mate Assistant. Tell me where you want to go, your dates, budget, and travel style!' }
     ]);
@@ -54,9 +54,14 @@ const ChatPanel = ({ onItineraryUpdate }) => {
 
         try {
             const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+
             const response = await fetch(`${API_BASE_URL}/api/chat/stream`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: headers,
                 body: JSON.stringify({ message: input, history: messages }), // sending entire history might become large
             });
 

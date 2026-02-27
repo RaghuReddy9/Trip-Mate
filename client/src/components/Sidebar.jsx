@@ -1,14 +1,23 @@
 import React from 'react';
-import { Home, Compass, MessageSquare, Settings, User } from 'lucide-react';
+import { Home, Compass, MessageSquare, Settings, User, LogIn, LogOut } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
-const Sidebar = () => {
+const Sidebar = ({ token, setToken }) => {
+    const navigate = useNavigate();
+
     const menuItems = [
         { icon: <Home size={20} />, label: 'Dashboard', active: true },
-        { icon: <Compass size={20} />, label: 'Discover', active: false },
-        { icon: <MessageSquare size={20} />, label: 'Chats', active: false },
-        { icon: <Settings size={20} />, label: 'Settings', active: false },
     ];
+
+    const handleAuthAction = () => {
+        if (token) {
+            localStorage.removeItem('token');
+            setToken(null);
+        } else {
+            navigate('/login');
+        }
+    };
 
     return (
         <motion.div
@@ -36,9 +45,12 @@ const Sidebar = () => {
             </nav>
 
             <div className="p-4 border-t border-[#1a1a1a]">
-                <div className="flex items-center gap-3 p-3 rounded-xl cursor-pointer hover:bg-[#1a1a1a] text-gray-400 hover:text-white transition-colors">
-                    <User size={20} />
-                    <span className="hidden lg:block text-sm font-medium">Profile</span>
+                <div
+                    onClick={handleAuthAction}
+                    className="flex items-center gap-3 p-3 rounded-xl cursor-pointer hover:bg-red-500/10 text-gray-400 hover:text-red-400 transition-colors"
+                >
+                    {token ? <LogOut size={20} /> : <LogIn size={20} />}
+                    <span className="hidden lg:block text-sm font-medium">{token ? 'Log Out' : 'Sign In'}</span>
                 </div>
             </div>
         </motion.div>
